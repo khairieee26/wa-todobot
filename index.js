@@ -65,12 +65,10 @@
 // });
 
 // client.initialize();
-
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const axios = require('axios');
 
-// Ambil dari Railway Variables
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
@@ -80,14 +78,20 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 }
 
 const client = new Client({
-  authStrategy: new LocalAuth({ dataPath: 'auth_info' }), // simpan login di Railway
+  authStrategy: new LocalAuth({ dataPath: 'auth_info' }),
   puppeteer: {
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    executablePath: '/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium-browser',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--disable-gpu'
+    ]
   }
 });
 
-// TAMPILKAN QR DI LOG RAILWAY
 client.on('qr', (qr) => {
   console.log('\n\nSCAN QR INI DI WHATSAPP KAMU (Linked Devices):');
   qrcode.generate(qr, { small: true });
@@ -95,7 +99,7 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', () => {
-  console.log('BOT WHATSAPP SUDAH ONLINE 24 JAM DI RAILWAY!');
+  console.log('BOT WHATSAPP SUDAH ONLINE 24/7 DI REPLIT!');
 });
 
 client.on('authenticated', () => {
@@ -103,10 +107,9 @@ client.on('authenticated', () => {
 });
 
 client.on('auth_failure', () => {
-  console.log('Login gagal – hapus folder auth_info lalu deploy ulang');
+  console.log('Login gagal – hapus folder auth_info lalu restart bot');
 });
 
-// TERIMA PESAN
 client.on('message', async (msg) => {
   const text = msg.body.trim();
 
@@ -114,8 +117,7 @@ client.on('message', async (msg) => {
     let content = text.slice(5).trim();
     let planned_at = null;
 
-    // Support format: /todo Beli susu @2025-12-31
-    const match = content.match(/@(\d{4\}-\d{2}-\d{2})$/);
+    const match = content.match(/@(\d{4}-\d{2}-\d{2})$/);
     if (match) {
       planned_at = match[1];
       content = content.replace(/@\d{4}-\d{2}-\d{2}$/, '').trim();
@@ -141,7 +143,6 @@ client.on('message', async (msg) => {
       msg.reply('Gagal simpan todo');
     }
   }
-
 
   else if (text.startsWith('/note')) {
     const content = text.slice(5).trim();
