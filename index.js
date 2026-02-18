@@ -2,9 +2,6 @@
 // const qrcode = require('qrcode-terminal');
 // const axios = require('axios');
 
-// const SUPABASE_URL = 'https://ltgtjdvegouzwosezmex.supabase.co';     // GANTI INI
-// const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Z3RqZHZlZ291endvc2V6bWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzNDY5MDYsImV4cCI6MjA3OTkyMjkwNn0.mrK5Eex7foSdVTuJ2rSfYOmmzb8WQcWcbKvfIBNFpjc'; // GANTI INI
-
 // const client = new Client({
 //     authStrategy: new LocalAuth(),
 //     puppeteer: { headless: true }
@@ -226,4 +223,5 @@ client.on("message", async (msg) => {
 });
 
 client.initialize();
+
 
